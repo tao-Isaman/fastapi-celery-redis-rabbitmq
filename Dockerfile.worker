@@ -1,0 +1,11 @@
+FROM python:3.9
+
+COPY ./src/celery /usr/src/celery
+
+WORKDIR /usr
+
+RUN pip install --upgrade pip
+
+RUN pip install redis celery
+
+CMD celery worker -A celery.tasks --loglevel=info

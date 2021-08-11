@@ -1,0 +1,19 @@
+FROM python:3.9
+
+COPY ./src/celery /usr/src/celery
+
+COPY ./src/__init__.py /usr/src/
+
+COPY ./src/config.py /usr/src/
+
+COPY ./requirements.txt /usr/src/
+
+RUN pip3 install --upgrade pip
+
+RUN pip3 install -r /usr/src/requirements.txt
+
+RUN pip3 install flower
+
+WORKDIR /usr/src
+
+CMD celery flower -A celery.tasks --broker=amqp://${RABBITMQ_USERNAME}:${RABBITMQ_PASSWORD}@${RABBITMQ_HOST}:${RABBITMQ_PORT}//
